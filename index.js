@@ -101,6 +101,7 @@ class Corestore extends Nanoresource {
     this.guard = new Nanoguard()
 
     this.opts = opts
+    this._hypercore = opts.hypercore || hypercore
 
     this._replicationStreams = []
     this._namespaces = new Map()
@@ -364,7 +365,7 @@ class Corestore extends Nanoresource {
     if (cacheOpts.data) cacheOpts.data = cacheOpts.data.namespace()
     if (cacheOpts.tree) cacheOpts.tree = cacheOpts.tree.namespace()
 
-    const core = hypercore(name => {
+    const core = this._hypercore(name => {
       if (name === 'key') return keyStorage.key
       if (name === 'secret_key') return keyStorage.secretKey
       return createStorage(name)
